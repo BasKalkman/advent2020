@@ -1,5 +1,3 @@
-//BFFFBBFRRR
-
 const fs = require('fs');
 const tickets = fs.readFileSync('./input.txt', 'utf-8').split('\r\n');
 
