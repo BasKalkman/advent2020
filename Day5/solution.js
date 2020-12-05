@@ -22,3 +22,15 @@ let highestID = tickets.reduce((a,c) => {
 }, 0)
 
 console.log('Part 1: ', highestID)
+
+// Part 2
+const seatIDs = tickets.map(e => {
+    return getSeatID(e)
+}).sort()
+
+for (let id of seatIDs) {
+    if (seatIDs.includes(id + 2) && !seatIDs.includes(id + 1)) {
+        console.log('Part 2: ', id+1);
+        return;
+    }
+}
