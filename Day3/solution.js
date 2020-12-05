@@ -38,10 +38,6 @@ const slopesToCheck = [
 ];
 const result = slopesToCheck.reduce((a, c) => {
     let [x, y] = c;
-    if (a === 0) {
-        return checkSlope(x, y);
-    } else {
-        return a * checkSlope(x, y);
-    }
-}, 0);
-console.log(result);
+    return a * checkSlope(x,y);
+}, 1);
+console.log('Part 2: ', result);
