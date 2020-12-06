@@ -1,4 +1,3 @@
-const { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } = require('constants');
 const fs = require('fs');
 const data = fs.readFileSync('./input.txt', 'utf-8').split('\r\n\r\n')
 
@@ -36,7 +35,6 @@ const part2 = data.reduce((acc, group) => {
     let allAnswered = checkEntries.filter(e => {
         return e[1] === groupSize ? true : false
     })
-
 
     return acc + allAnswered.length
 
