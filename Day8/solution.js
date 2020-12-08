@@ -36,64 +36,29 @@ function part1(list) {
 console.log('Part 1: ', part1(instructions))
 
 // Part 2
-function listFixes(list) {
-    let accumulator = 0
-    let current = 0
-    let prevInstructions = []
-    const seen = new Map()
+let checkedIndices = []
+let testList = [...instructions]
 
-    // Run until loop
-    while (!seen.has(current)) {
-        seen.set(current, seen.size)
-        prevInstructions.push({
-            current: current,
-            instruction: list[current],
-            accValue: accumulator
-        })
+for (let i = 0; i < instructions.length; i++) {
+    testList = [...instructions]
 
-        let [command, num] = list[current].split(' ')
-        
-        switch (command) {
-            case 'acc':
-                accumulator += parseInt(num)
-                current++
-                break;
-            case 'nop':
-                current++
-                break;
-            case 'jmp':
-                current += parseInt(num)
-        
-            default:
-                break;
+    if (testList[i].match(/jmp|nop/) && !checkedIndices.includes(i)) {
+        if (testList[i].match(/jmp/)) {
+            testList[i] = testList[i].replace(/jmp/, 'nop')
+        } else if (testList[i].match(/nop/)) {
+            testList[i] = testList[i].replace(/nop/, 'jmp')
         }
+        checkedIndices.push(i)
     }
 
-    // Filter instruction changes to try
-    const fixesToTry = prevInstructions.filter(e => e.instruction.match(/jmp|nop/)).map(e => {
-        if (e.instruction.match(/nop/)) {
-            e.instruction.replace(/nop/, 'jmp')
-        } else {
-            e.instruction.replace(/jmp/, 'nop')
-        }
+    let success = checkList(testList)
 
-        return e
-    })
-
-    return fixesToTry
+    if (success) {
+        return;
+    }
 }
 
-const fixesToTry = listFixes(instructions)
-
-for (let i = 0; i < fixesToTry.length; i++) {
-    runFix(fixesToTry[i])
-}
-
-
-function runFix(fix) {
-    let list = [...instructions]
-    list[fix.current] = fix.instruction
-
+function checkList(list) {
     let accumulator = 0
     let current = 0;
     const seen = new Map();
@@ -120,10 +85,12 @@ function runFix(fix) {
         }
         
     }
-    
+
     if (current >= list.length) {
         console.log('Part 2: ', accumulator)
+        return true;
     }
 
-    return accumulator;
+    return false
+    
 }
