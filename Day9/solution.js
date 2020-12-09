@@ -34,39 +34,25 @@ console.log('Part 1: ', part1());
 function part2() {
     let invalidNum = part1();
     let sum = 0;
-    let i = -1; 
-    let j = -1;
-    let currentOp = ''
+    let i = 0; 
+    let j = 0;
 
     while (sum !== invalidNum) {
         while (sum < invalidNum) {
-            currentOp = ('i')
-            i++
             sum += data[i]
+            i++
         }
-
+        
         while (sum > invalidNum) {
-            currentOp = 'j'
+            sum -= data[j]
             j++
-            sum = sum - data[j]
         }
     }
 
-    let minmaxArray = data.slice(j+1,i+1).sort((a,b) => a - b);
-    let sanityCheck = minmaxArray.reduce((a,c) => {
-        return a + c;
-    }, 0)
-    console.log('Sanity check: ', sanityCheck, invalidNum, sanityCheck === invalidNum)
-
-
+    let minmaxArray = data.slice(j,i).sort((a,b) => a - b);
 
     let min = Math.min(...minmaxArray)
     let max = Math.max(...minmaxArray)
-    let minPos = minmaxArray[0]
-    let maxPos = minmaxArray[minmaxArray.length-1]
-
-    console.log(min, minPos, min === minPos)
-    console.log(max, maxPos, max === maxPos)
 
     return min + max
 
