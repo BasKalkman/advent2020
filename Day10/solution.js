@@ -24,63 +24,23 @@ console.log(part1())
 
 
 // Part 2
-function getConnections() {
-    const connections = new Object()
-
-    for (let i = 0; i < data.length; i++) {
-        if (!data[i+1]) {
-            connections[`${data[i]}`] = null
-            break;
-        }
-
-
-        let arr = [];
-        let diff = 0;
-        let idx = i + 1;
-        while (diff <= 3) {
-            diff = data[idx] - data[i]
-            if (diff <= 3) {
-                arr.push(data[idx])
-            }
-            idx++
-        }
-        connections[`${data[i]}`] = arr
+const DP = new Map()
+function check(i) {
+    if (i === data.length - 1) {
+        return 1
+    }
+    if (DP.has(i)) {
+        return DP.get(i)
     }
 
-    return connections
-}
-
-const tree = getConnections()
-
-function part2() {
-    let num = Object.keys(tree).reduce((a,c) => {
-        console.log(c, tree[`${c}`])
-        if (tree[`${c}`] === null) {
-            return 1
+    let ans = 0;
+    for (let j = i+1; j < data.length; j++) {
+        if(data[j] - data[i] <=3) {
+            ans += check(j)
         }
-
-        return a * tree[`${c}`].length
-    }, 1)
-
-    return num
+    }
+    DP.set(i, ans)
+    return ans
 }
 
-console.log(part2())
-
-
-
-// const calcConnections = []
-
-// function parseTree(start) {
-//     if (tree[start] === null) {
-//         return
-//     }
-
-//     calcConnections.push(tree[start].length)
-
-//     for (connection of tree[start]) {
-//         parseTree(`${connection}`)
-//     }
-// }
-
-// console.log(parseTree('0'))
+console.log(check(0))
