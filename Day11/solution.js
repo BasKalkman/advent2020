@@ -26,7 +26,7 @@ for (let i = 0; i < currentSeats.length; i++) {
     }
 }
 
-console.log(totalSeatsOccupied)
+console.log('Part 1: ', totalSeatsOccupied)
 
 
 // Part 2
