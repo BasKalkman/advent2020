@@ -1,8 +1,13 @@
 class Ship {
-    constructor() {
+    constructor(p2) {
         this.dir = 'east',
         this.x = 0,
-        this.y = 0
+        this.y = 0,
+        this.wp = {
+            N: 1,
+            E: 10,
+        },
+        this.p2 = p2 || false
     }
 
     execInstruction(str) {
@@ -36,6 +41,12 @@ class Ship {
     }
 
     goForward(int) {
+        if (this.p2) {
+            this.x += this.wp.E * int
+            this.y += this.wp.N * int
+            return;
+        }
+
         switch(this.dir) {
             case 'north':
                 this.goNorth(int)
@@ -53,19 +64,19 @@ class Ship {
     }
 
     goNorth(int) {
-        this.y = this.y + int
+        this.p2 ? this.wp.N += int : this.y = this.y + int
     }
 
     goSouth(int) {
-        this.y = this.y - int
+        this.p2 ? this.wp.N -= int : this.y = this.y - int
     }
 
     goWest(int) {
-        this.x = this.x - int
+        this.p2 ? this.wp.E -= int : this.x = this.x - int
     }
 
     goEast(int) {
-        this.x = this.x + int
+        this.p2 ? this.wp.E += int : this.x = this.x + int
     }
 
     turnLeft(int) {
@@ -75,6 +86,14 @@ class Ship {
     }
 
     execLeftTurn() {
+        if (this.p2) {
+            let newE = 0 - this.wp.N;
+            let newN = 0 + this.wp.E;
+            this.wp.E = newE
+            this.wp.N = newN
+            return;
+        }
+
         switch(this.dir) {
             case 'north':
                 this.dir = 'west'
@@ -98,6 +117,14 @@ class Ship {
     }
 
     execRightTurn() {
+        if (this.p2) {
+            let newE = 0 + this.wp.N;
+            let newN = 0 - this.wp.E;
+            this.wp.E = newE
+            this.wp.N = newN
+            return;
+        }
+
         switch(this.dir) {
             case 'north':
                 this.dir = 'east'
