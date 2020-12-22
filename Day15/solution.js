@@ -1,56 +1,24 @@
-const input = '16,1,0,18,12,14,19'
-const targetTurn = 2020
-// const targetTurn = 30000000
-const data = input.split(',').map(Number)
+const input = '16,1,0,18,12,14,19'.split(',').map(Number)
+// const targetTurn = 2020 // Part 1
+const targetTurn = 30000000 // Part 2
 
-const seen = new Map()
-let current = {
-    turn: 0,
-    value: null,
-    prev: null,
-}
+let currentValue = input[input.length - 1]
+let currentTurn = input.length
+let seen = new Map()
 
-function addAfter(current, turn, value) {
-    let obj = {
-        turn: turn,
-        value: value,
-        prev: current
-    }
+input.map((e,i) => seen.set(e, i+1))
+console.log(seen)
 
-    return obj
-}
-
-function findLast(value) {
-    if (!seen.has(value)) {
-        return null;
-    }
-
-    let search = current;
-    while (search.prev !== null) {
-        search = search.prev;
-        if (search.value === value) {
-            return search.turn
-        }
-    }
-    return null;
-
-}
-
-
-for (let i = 0; i < data.length; i++) {
-    seen.set(current.value, seen.size)
-    current = addAfter(current, i+1, data[i]);
-}
-
-while (current.turn < targetTurn) {
-    if (seen.has(current.value)) {
-        current = addAfter(current, current.turn + 1, current.turn - findLast(current.value))
+while (currentTurn < targetTurn) {
+    if (seen.has(currentValue)) {
+        let prevTurn = seen.get(currentValue)
+        seen.set(currentValue, currentTurn)
+        currentValue = currentTurn - prevTurn;
     } else {
-        current = addAfter(current, current.turn + 1, 0);
+        seen.set(currentValue, currentTurn)
+        currentValue = 0
     }
 
-    seen.set(current.value, seen.size)
-
+    currentTurn++
 }
-console.log(current)
-
+console.log(currentValue)
