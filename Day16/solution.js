@@ -11,12 +11,11 @@ const myTicket = ticketLines.shift()
 let part1Count = 0
 const validTickets = ticketLines.filter(e => verifyTicket(e))
 
-console.log(ticketLines.length, validTickets.length)
+console.log(validTickets.length, ticketLines.length)
 console.log('Part 1: ', part1Count)
 
 function verifyTicket(ticket) {
     let arr = ticket.split(',').map(Number)
-    let valid = false
 
     for (num of arr) {
         let numValid = false
@@ -31,8 +30,9 @@ function verifyTicket(ticket) {
 
         if (numValid === false) {
             part1Count += num
+            return false;
         }
     }
 
-    return valid
+    return true
 }
