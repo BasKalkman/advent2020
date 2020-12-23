@@ -5,7 +5,7 @@ const rules = data.match(/\d+-\d+/g).map(e => {
     return e.split('-').map(Number)
 })
 const ticketLines = data.split('\r\n').filter(e => e.match(/\d+,\d+/g))
-const myTicket = ticketLines.shift()
+const myTicket = ticketLines.shift().split(',').map(Number)
 
 let part1Count = 0
 const validTickets = ticketLines.filter(e => verifyTicket(e))
@@ -58,13 +58,14 @@ const rulebook = data.split('\r\n').filter(e => e.match(/\d+-\d+/)).map(e => {
 
     let obj = {
         name: name,
-        nums: nums
+        nums: nums,
+        validForColumn: []
     }
 
     return obj
 })
 
-// For each rule, check which column has no invalid nums
+// For each rule, check which column are valid 
 const ruleIndices = new Map()
 for (rule of rulebook) {
     let [loMin, loMax, hiMin, hiMax] = rule.nums
@@ -83,14 +84,29 @@ for (rule of rulebook) {
         }
 
         if (valid === true) {
-            ruleIndices.set(rule.name, i)
+            rule.validForColumn.push(i)
+        }
+    }
+}
+
+// Assign cols to which rule it must be
+let unassigned = rulebook.sort((a,b) => a.validForColumn.length - b.validForColumn.length)
+let assignedCols = new Map()
+
+for (col of unassigned) {
+    for (let i = 0; i < col.validForColumn.length; i++) {
+        if (!assignedCols.has(col.validForColumn[i])) {
+            assignedCols.set(col.validForColumn[i], col.name)
             break;
         }
     }
 }
 
-console.log(ruleIndices)
-
-ruleIndices.forEach((rule, index) => {
-    console.log(rule, index)
+// Check against own ticket
+let part2 = 1;
+assignedCols.forEach((rulename, index) => {
+    if (rulename.match(/departure/)) {
+        part2 *= myTicket[index]
+    }
 })
+console.log('Part 2: ', part2)
