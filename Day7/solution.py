@@ -38,4 +38,24 @@ for bag in bag_rules.keys():
     if check_inside(bag, 'shiny gold'):
         part1 += 1
 
-print(part1)
+print(f'Part 1: {part1}')
+
+# Part 2
+
+
+def num_check_bag(target):
+    bag = bag_rules[target]
+
+    if len(bag) == 0:
+        return 0
+
+    ans = 0
+
+    for b in bag:
+        ans += b['num']
+        ans += b['num'] * num_check_bag(b['type'])
+
+    return ans
+
+
+print(f'Part 2: {num_check_bag("shiny gold")}')
