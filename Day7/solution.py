@@ -8,7 +8,7 @@ for line in data:
     bag, bags = line.split('contain')
     bag = re.match(r'(\w+ \w+)', bag).group()
     bags_inside = re.findall(r'(\d+ \w+ \w+) bags?', bags)
-    bag_rules[bag] = []
+    bag_rules[bag] = list()
 
     if bags_inside:
         for b in bags_inside:
@@ -18,16 +18,24 @@ for line in data:
 
 
 def check_inside(bag, target):
+    if len(bag_rules[bag]) == 0:
+        return False
+
+    target_inside = False
+
     for b in bag_rules[bag]:
         if b['type'] == target:
-            return 1
-        else:
-            check_inside(b['type'], target)
-    return 0
+            target_inside = True
+            break
+        elif check_inside(b['type'], target) == True:
+            target_inside = True
+
+    return target_inside
 
 
 part1 = 0
-for bag in bag_rules:
-    part1 += check_inside(bag, 'shiny gold')
+for bag in bag_rules.keys():
+    if check_inside(bag, 'shiny gold'):
+        part1 += 1
 
 print(part1)
